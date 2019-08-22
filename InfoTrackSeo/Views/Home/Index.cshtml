@@ -3,46 +3,52 @@
 @model InfoTrackSeo.Models.HomeViewModel
 
 @{
-    ViewBag.Title = "Home Page";
+    ViewBag.Title = "InfoTrack SEO";
     const string formName = "crawlForm";
 }
 
 @using (Html.BeginForm("Crawl", "Home", FormMethod.Post, new { @class = "mt-5 mb-5", name = formName, id = formName }))
 {
+    @Html.ValidationSummary(true, "", new {@class = "text-danger"})
     <div class="form-group">
         @Html.LabelFor(m => m.Uri)
-        @Html.TextBoxFor(m => m.Uri, new { @class = "form-control" })
+        @Html.TextBoxFor(m => m.Uri, new { @class = "form-control", @aria_describedby="uriHelpBlock" })
+        <small id="uriHelpBlock" class="form-text text-muted">By default searches for <code>http://</code> addresses, include <code>https://</code> to override.</small>
+        @Html.ValidationMessageFor(m => m.Uri, "", new {@class = "text-danger"})
     </div>
 
     <div class="form-group">
         @Html.LabelFor(m => m.Keyword)
-        @Html.TextBoxFor(m => m.Keyword, new { @class = "form-control" })
+        @Html.TextBoxFor(m => m.Keyword, new { @class = "form-control", @aria_describedby="keywordHelpBlock", @required = "required" })
+        <small id="keywordHelpBlock" class="form-text text-muted">The search term(s) you would like to use.</small>
+        @Html.ValidationMessageFor(m => m.Keyword, "", new {@class = "text-danger"})
     </div>
 
     <input type="submit" value="Submit" class="btn btn-primary btn-sm float-right" id="submitCrawlForm" />
 }
 
 <h3>Results</h3>
-<div class="card-deck d-flex flex-row flex-wrap">
-</div>
+<small>Please note that rankings and number of occurrences do not include advertisements.</small>
+<section class="card-deck">
+</section>
 
 <!--Template for info cards-->
 <script id="resultsTemplate" type="text/x-jQuery-tmpl">
-    <div class="card bg-info text-white mb-3" style="min-width: 380px; max-width: 450px;">
+    <div class="card bg-info text-white mb-3 card-result">
         <div class="card-header">
             <div class="row">
-                <div class="col-4">
+                <div class="col-3">
                     <label class="font-weight-bold" for="Uri">URI</label>
                 </div>
-                <div class="col-8">
+                <div class="col-9">
                     <span id="Uri">${uri}</span>
                 </div>
             </div>
             <div class="row">
-                <div class="col-4">
+                <div class="col-3">
                     <label class="font-weight-bold" for="Keyword">Keyword</label>
                 </div>
-                <div class="col-8">
+                <div class="col-9">
                     <span id="Keyword">${keyword}</span>
                 </div>
             </div>

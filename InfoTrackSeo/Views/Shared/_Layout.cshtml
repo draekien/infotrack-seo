@@ -3,14 +3,16 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewBag.Title - My ASP.NET Application</title>
+    <title>@ViewBag.Title</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
 </head>
 <body>
-    <nav class="navbar navbar-dark bg-dark fixed-top">
+<nav class="navbar navbar-dark bg-dark fixed-top">
+    <div class="container">
         @Html.ActionLink("InfoTrack SEO", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
-    </nav>
+    </div>
+</nav>
     <div class="container body-content">
         @RenderBody()
         <hr />
@@ -19,15 +21,17 @@
         </footer>
     </div>
 
-    <div class="toast" id="toastError" role="alert" aria-live="assertive" aria-atomic="true" style="position: fixed; bottom: 10px; right: 10px;">
+    <div class="toast" id="toast" role="alert" aria-live="assertive" aria-atomic="true" style="position: fixed; bottom: 10px; right: 10px;">
         <div class="toast-header">
-            <strong class="mr-auto">Error</strong>
+            <strong class="mr-auto" id="toastHeader">
+                <!--custom header to go here-->
+            </strong>
             <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
             </button>
         </div>
-        <div class="toast-body">
-            Too many requests, please wait a few moments and try again.
+        <div class="toast-body" id="toastMessage">
+            <!--custom message to go here-->
         </div>
     </div>
 

@@ -9,9 +9,11 @@ namespace InfoTrackSeo.Models
     public class HomeViewModel
     {
         [Display(Name = "URI")]
+        [Required]
         public string Uri { get; set; }
 
         [Display(Name = "Keyword")]
+        [Required]
         public string Keyword { get; set; }
 
         /// <summary>

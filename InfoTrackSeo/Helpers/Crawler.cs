@@ -1,50 +1,48 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
+using System.Threading.Tasks;
 using System.Web;
+using System.Web.Util;
+using Microsoft.Web.Infrastructure;
 
 namespace InfoTrackSeo.Helpers
 {
     public static class Crawler
     {
-        private static string _address = "https://www.google.com.au/search?gl=au&hl=en&pws=0&num=100&q=";
+        private const string Address = "https://www.google.com.au/search?gl=au&hl=en&pws=0&num=100&q=";
 
         /// <summary>
-        /// Get data stream from google
+        /// Get the response from the search result as string
         /// </summary>
-        /// <param name="keyword">search terms to use</param>
+        /// <param name="keyword"></param>
         /// <returns></returns>
-        public static Stream GetDataStream(string keyword)
+        public static async Task<string> GetResultsAsString(string keyword)
         {
-            var query = keyword.Replace(" ", "+");
-            var uri = _address + query;
-
-            // create the web request and get response
-            var request = WebRequest.Create(uri);
-            HttpWebResponse response = null;
+            var data = "";
             try
             {
-                response = (HttpWebResponse)request.GetResponse();
+                using (var client = new HttpClient())
+                {
+                    using (var res = await client.GetAsync(Address + HttpUtility.UrlEncode(keyword)))
+                    {
+                        using (var content = res.Content)
+                        {
+                            data = await content.ReadAsStringAsync();
+                        }
+                    }
+                }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                return null;
+                return "";
             }
 
-            return response.GetResponseStream();
-        }
-
-        /// <summary>
-        /// Read the data stream to a string
-        /// </summary>
-        /// <param name="dataStream"></param>
-        /// <returns>string</returns>
-        public static string ReadDataStream(Stream dataStream)
-        {
-            var reader = new StreamReader(dataStream);
-            return reader.ReadToEnd();
+            return data;
         }
 
         /// <summary>
@@ -52,7 +50,7 @@ namespace InfoTrackSeo.Helpers
         /// </summary>
         /// <param name="responseFromServer"></param>
         /// <returns></returns>
-        public static List<int> IndexesOfLinks(string responseFromServer)
+        private static List<int> IndexesOfLinks(string responseFromServer)
         {
             return responseFromServer.AllIndexesOf("<div class=\"ZINbbc xpd O9g5cc uUPGi\"><div class=\"kCrYT\">");
         }
@@ -63,9 +61,9 @@ namespace InfoTrackSeo.Helpers
         /// <param name="uri"></param>
         /// <param name="responseFromServer"></param>
         /// <returns></returns>
-        public static List<int> IndexesOfUri(string uri, string responseFromServer)
+        private static IEnumerable<int> IndexesOfUri(string uri, string responseFromServer)
         {
-            return responseFromServer.AllIndexesOf($"<a href=\"/url?q={uri}");
+            return responseFromServer.AllIndexesOf($"<div class=\"kCrYT\"><a href=\"/url?q={uri}");
         }
 
         /// <summary>
@@ -76,7 +74,7 @@ namespace InfoTrackSeo.Helpers
         /// <returns></returns>
         public static int OccurrencesOfUri(string uri, string responseFromServer)
         {
-            return responseFromServer.AllIndexesOf($"<a href=\"/url?q={uri}").Count;
+            return responseFromServer.AllIndexesOf($"<div class=\"kCrYT\"><a href=\"/url?q={uri}").Count;
         }
 
         /// <summary>
@@ -115,10 +113,10 @@ namespace InfoTrackSeo.Helpers
         /// <returns></returns>
         private static List<int> AllIndexesOf(this string str, string value)
         {
-            if (String.IsNullOrEmpty(value))
+            if (string.IsNullOrEmpty(value))
                 throw new ArgumentException("The string to find may not be empty", "value");
-            List<int> indexes = new List<int>();
-            for (int index = 0; ; index += value.Length)
+            var indexes = new List<int>();
+            for (var index = 0; ; index += value.Length)
             {
                 index = str.IndexOf(value, index);
                 if (index == -1)

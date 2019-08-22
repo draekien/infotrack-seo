@@ -15,3 +15,8 @@
 .dl-horizontal dt {
     white-space: normal;
 }
+
+.card-result {
+    min-width: 300px;
+    max-width: 340px;
+}

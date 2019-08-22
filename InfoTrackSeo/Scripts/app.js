@@ -5,16 +5,20 @@
         e.preventDefault();
 
         var $form = $("#crawlForm");
-        var formData = $form.serializeArray();
 
-        var target = $form.attr("action");
+        if ($("#Keyword").val() !== "" && $("#Uri").val() !== "") {
+            const formData = $form.serializeArray();
+            const target = $form.attr("action");
 
-        ajax_post_promise(target, formData).then((response) => {
-            $(".card-deck").append($("#resultsTemplate").tmpl(response));
-        }).catch((response) => {
-            // TODO: handle errors
-            $("#toastError").toast("show");
-        });
+            ajax_post_promise(target, formData).then((response) => {
+                $(".card-deck").append($("#resultsTemplate").tmpl(response));
+                showToast("Success", "Retrieved search engine results.");
+            }).catch((response) => {
+                showToast("Error", response);
+            });
+        } else {
+            showToast("Error", "Form has empty input fields");
+        }
     });
 });
 
@@ -35,4 +39,12 @@ function ajax_post_promise(target, data) {
             })
             .fail((jqXhr, textStatus, errorThrown) => reject(errorThrown));
     });
+}
+
+function showToast(header, body) {
+    const $toast = $(".toast");
+    $("#toastHeader").html(header);
+    $("#toastMessage").html(body);
+
+    $toast.toast("show");
 }

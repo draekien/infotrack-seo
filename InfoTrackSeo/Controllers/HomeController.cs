@@ -18,9 +18,9 @@ namespace InfoTrackSeo.Controllers
         /// <returns></returns>
         public ActionResult Index()
         {
-            // the default search
-            var uri = "https://www.infotrack.com.au";
-            var keyword = "online title search";
+            // the default search terms
+            const string uri = "https://www.infotrack.com.au";
+            const string keyword = "online title search";
 
             return View(new HomeViewModel
             {
@@ -37,22 +37,25 @@ namespace InfoTrackSeo.Controllers
         /// <param name="uri"></param>
         /// <param name="keyword"></param>
         /// <returns></returns>
-        public JsonResult Crawl(string uri, string keyword)
+        public async Task<JsonResult> Crawl(string uri, string keyword)
         {
-            var dataStream = Helpers.Crawler.GetDataStream(keyword);
-            if (dataStream == null)
+            var data = await Helpers.Crawler.GetResultsAsString(keyword);
+
+            // if there is no data then something went wrong (most likely google blocked us)
+            if (data == "")
+            {
                 return new JsonResult
                 {
                     Data = new
                     {
-                        error = "Could not retrieve data stream."
+                        error = "Could not retrieve search engine results."
                     }
                 };
-            var responseFromServer = Helpers.Crawler.ReadDataStream(dataStream);
-            var uriCount = Helpers.Crawler.OccurrencesOfUri(uri, responseFromServer);
-            var uriLocations = Helpers.Crawler.LocationsOfUri(uri, responseFromServer);
+            }
 
-            dataStream.Close();
+            var uriCount = Helpers.Crawler.OccurrencesOfUri(uri.ToLower(), data);
+            var uriLocations = Helpers.Crawler.LocationsOfUri(uri.ToLower(), data);
+
 
             return new JsonResult
             {
