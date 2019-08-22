@@ -11,50 +11,6 @@ namespace InfoTrackSeo.Helpers
     {
         private static string _address = "https://www.google.com.au/search?gl=au&hl=en&pws=0&num=100&q=";
 
-        public static void Crawl(string keyword)
-        {
-            var query = keyword.Replace(" ", "+");
-            var uri = _address + query;
-
-            // create the web request and get response
-            WebRequest request = WebRequest.Create(uri);
-            HttpWebResponse response = (HttpWebResponse)request.GetResponse();
-            Stream dataStream = response.GetResponseStream();
-
-            if (dataStream != null)
-            {
-                StreamReader reader = new StreamReader(dataStream);
-
-                string responseFromServer = reader.ReadToEnd();
-
-                var indexesOfLinks = responseFromServer.AllIndexesOf("<div class=\"ZINbbc xpd O9g5cc uUPGi\"><div class=\"kCrYT\">");
-                var indexesOfInfoTrack = responseFromServer.AllIndexesOf("<a href=\"/url?q=https://www.infotrack");
-
-                var occurrencesOfInfoTrack = indexesOfInfoTrack.Count;
-                var infoTrackFoundAt = new List<int>();
-                var startIndex = 0;
-
-                foreach (var t in indexesOfInfoTrack)
-                {
-                    for (var j = startIndex; j < indexesOfLinks.Count; j++)
-                    {
-                        if (t >= indexesOfLinks[j]) continue;
-                        infoTrackFoundAt.Add(j + 1);
-                        startIndex = j;
-                        break;
-                    }
-                }
-
-                Console.WriteLine(occurrencesOfInfoTrack);
-                infoTrackFoundAt.ForEach(i => Console.WriteLine(i.ToString()));
-
-                reader.Close();
-            }
-
-            dataStream?.Close();
-            response.Close();
-        }
-
         public static Stream GetDataStream(string keyword)
         {
             var query = keyword.Replace(" ", "+");
@@ -78,20 +34,20 @@ namespace InfoTrackSeo.Helpers
             return responseFromServer.AllIndexesOf("<div class=\"ZINbbc xpd O9g5cc uUPGi\"><div class=\"kCrYT\">");
         }
 
-        public static List<int> IndexesOfInfoTrack(string responseFromServer)
+        public static List<int> IndexesOfUri(string uri, string responseFromServer)
         {
-            return responseFromServer.AllIndexesOf("<a href=\"/url?q=https://www.infotrack");
+            return responseFromServer.AllIndexesOf($"<a href=\"/url?q={uri}");
         }
 
-        public static int OccurrencesOfInfoTrack(string responseFromServer)
+        public static int OccurrencesOfUri(string uri, string responseFromServer)
         {
-            return responseFromServer.AllIndexesOf("<a href=\"/url?q=https://www.infotrack").Count;
+            return responseFromServer.AllIndexesOf($"<a href=\"/url?q={uri}").Count;
         }
 
-        public static List<int> LocationsOfInfoTrack(string responseFromServer)
+        public static List<int> LocationsOfUri(string uri, string responseFromServer)
         {
             var indexesOfLinks = IndexesOfLinks(responseFromServer);
-            var indexesOfInfoTrack = IndexesOfInfoTrack(responseFromServer);
+            var indexesOfInfoTrack = IndexesOfUri(uri, responseFromServer);
 
             var infoTrackFoundAt = new List<int>();
             var startIndex = 0;

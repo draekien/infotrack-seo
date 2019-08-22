@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 
@@ -7,8 +8,22 @@ namespace InfoTrackSeo.Models
 {
     public class HomeViewModel
     {
-        public int InfoTrackCount { get; set; }
+        [Display(Name = "URI")]
+        public string Uri { get; set; }
 
-        public List<int> InfoTrackLinkLocations { get; set; }
+        [Display(Name = "Keyword")]
+        public string Keyword { get; set; }
+
+        /// <summary>
+        /// Number of times InfoTrack's website appears in the search results
+        /// </summary>
+        [Display(Name = "Count of URI Occurrences")]
+        public int LinkCount { get; set; }
+
+        /// <summary>
+        /// Where the url is found on the page.
+        /// </summary>
+        [Display(Name = "Location of URI Occurrences")]
+        public List<int> LinkLocations { get; set; }
     }
 }
