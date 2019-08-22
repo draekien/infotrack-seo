@@ -22,6 +22,8 @@ namespace InfoTrackSeo
             bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
                       "~/Scripts/bootstrap.min.js"));
 
+            bundles.Add(new ScriptBundle("~/bundles/app").Include("~/Scripts/app.js"));
+
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.min.css",
                       "~/Content/site.css"));

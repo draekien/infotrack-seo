@@ -19,8 +19,22 @@
         </footer>
     </div>
 
+    <div class="toast" id="toastError" role="alert" aria-live="assertive" aria-atomic="true" style="position: fixed; bottom: 10px; right: 10px;">
+        <div class="toast-header">
+            <strong class="mr-auto">Error</strong>
+            <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="toast-body">
+            Too many requests, please wait a few moments and try again.
+        </div>
+    </div>
+
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
+    <script type="text/javascript" src="//ajax.aspnetcdn.com/ajax/jquery.templates/beta1/jquery.tmpl.js"></script>
+    @Scripts.Render("~/bundles/app")
     @RenderSection("scripts", required: false)
 </body>
 </html>

@@ -4,45 +4,56 @@
 
 @{
     ViewBag.Title = "Home Page";
-    var formName = "crawlForm";
+    const string formName = "crawlForm";
 }
 
-@using (Html.BeginForm("Crawl", "Home", FormMethod.Post, new { name = formName, id = formName }))
+@using (Html.BeginForm("Crawl", "Home", FormMethod.Post, new { @class = "mt-5 mb-5", name = formName, id = formName }))
 {
     <div class="form-group">
-        @Html.LabelFor(m => m.Uri, new { @class = "col-form-label" })
+        @Html.LabelFor(m => m.Uri)
         @Html.TextBoxFor(m => m.Uri, new { @class = "form-control" })
     </div>
 
     <div class="form-group">
-        @Html.LabelFor(m => m.Keyword, new { @class = "col-form-label" })
+        @Html.LabelFor(m => m.Keyword)
         @Html.TextBoxFor(m => m.Keyword, new { @class = "form-control" })
     </div>
 
-    <input type="submit" value="Submit" class="btn btn-primary btn-sm" />
+    <input type="submit" value="Submit" class="btn btn-primary btn-sm float-right" id="submitCrawlForm" />
 }
 
 <h3>Results</h3>
-<ul class="list-group">
-    <li class="list-group-item row">
-        <div class="col-md-3">
-            @Html.LabelFor(m => m.Uri, new { @class = "col-form-label" })
-            @Html.DisplayFor(m => m.Uri)
+<div class="card-deck d-flex flex-row flex-wrap">
+</div>
+
+<!--Template for info cards-->
+<script id="resultsTemplate" type="text/x-jQuery-tmpl">
+    <div class="card bg-info text-white mb-3" style="min-width: 380px; max-width: 450px;">
+        <div class="card-header">
+            <div class="row">
+                <div class="col-4">
+                    <label class="font-weight-bold" for="Uri">URI</label>
+                </div>
+                <div class="col-8">
+                    <span id="Uri">${uri}</span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-4">
+                    <label class="font-weight-bold" for="Keyword">Keyword</label>
+                </div>
+                <div class="col-8">
+                    <span id="Keyword">${keyword}</span>
+                </div>
+            </div>
         </div>
-        <div class="col-md-3">
-            @Html.LabelFor(m => m.Keyword, new { @class = "col-form-label" })
-            @Html.DisplayFor(m => m.Keyword)
+        <div class="card-body">
+            <p class="card-text">${uriCount} occurrence of specified URI:</p>
         </div>
-        <div class="col-md-3">
-            @Html.LabelFor(m => m.LinkCount, new { @class = "col-form-label" })
-            @Html.DisplayFor(m => m.LinkCount)
-        </div>
-        <div class="col-md-3">
-            @Html.LabelFor(m => m.LinkLocations, new { @class = "col-form-label" })
-            @foreach (var location in Model.LinkLocations)
-            {
-                <p>Result Number: @Html.DisplayFor(m => location)</p>
-            }
-        </div>
-    </li>
-</ul>
+        <ul class="list-group list-group-flush">
+            {{each(prop, val) uriLocations}}
+            <li class="list-group-item bg-info">Rank No. ${val}</li>
+            {{/each}}
+        </ul>
+    </div>
+</script>

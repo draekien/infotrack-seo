@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
@@ -11,60 +12,61 @@ namespace InfoTrackSeo.Controllers
 {
     public class HomeController : Controller
     {
+        /// <summary>
+        /// home page, submits the default search
+        /// </summary>
+        /// <returns></returns>
         public ActionResult Index()
         {
             // the default search
             var uri = "https://www.infotrack.com.au";
             var keyword = "online title search";
-            var dataStream = Helpers.Crawler.GetDataStream(keyword);
-            var responseFromServer = Helpers.Crawler.ReadDataStream(dataStream);
-            var infoTrackCount = Helpers.Crawler.OccurrencesOfUri(uri, responseFromServer);
-            var infoTrackPageLocation = Helpers.Crawler.LocationsOfUri(uri, responseFromServer);
-
-            dataStream?.Close();
 
             return View(new HomeViewModel
             {
                 Uri = uri,
                 Keyword = keyword,
-                LinkCount = infoTrackCount,
-                LinkLocations = infoTrackPageLocation
+                LinkCount = 0,
+                LinkLocations = new List<int>()
             });
         }
 
-        public async Task<JsonResult> Crawl(string uri, string keywords)
+        /// <summary>
+        /// Form submission
+        /// </summary>
+        /// <param name="uri"></param>
+        /// <param name="keyword"></param>
+        /// <returns></returns>
+        public JsonResult Crawl(string uri, string keyword)
         {
-            var dataStream = Helpers.Crawler.GetDataStream("online title search");
+            var dataStream = Helpers.Crawler.GetDataStream(keyword);
+            if (dataStream == null)
+                return new JsonResult
+                {
+                    Data = new
+                    {
+                        error = "Could not retrieve data stream."
+                    }
+                };
             var responseFromServer = Helpers.Crawler.ReadDataStream(dataStream);
             var uriCount = Helpers.Crawler.OccurrencesOfUri(uri, responseFromServer);
             var uriLocations = Helpers.Crawler.LocationsOfUri(uri, responseFromServer);
 
-            dataStream?.Close();
+            dataStream.Close();
 
             return new JsonResult
             {
                 Data = new
                 {
-                    uri = uri,
-                    keywords = keywords,
-                    uriCount = uriCount,
-                    uriLocations = uriLocations
+                    success = new
+                    {
+                        uri = uri,
+                        keyword = keyword,
+                        uriCount = uriCount,
+                        uriLocations = uriLocations,
+                    }
                 }
             };
-        }
-
-        public ActionResult About()
-        {
-            ViewBag.Message = "Your application description page.";
-
-            return View();
-        }
-
-        public ActionResult Contact()
-        {
-            ViewBag.Message = "Your contact page.";
-
-            return View();
         }
     }
 }
