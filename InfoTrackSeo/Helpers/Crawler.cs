@@ -96,7 +96,7 @@ namespace InfoTrackSeo.Helpers
                 for (var j = startIndex; j < indexesOfLinks.Count; j++)
                 {
                     if (t >= indexesOfLinks[j]) continue;
-                    infoTrackFoundAt.Add(j + 1);
+                    infoTrackFoundAt.Add(j);
                     startIndex = j;
                     break;
                 }
