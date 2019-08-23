@@ -1,14 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Web;
-using System.Web.Helpers;
+﻿using System.Threading.Tasks;
 using System.Web.Mvc;
+using InfoTrackSeo.Helpers;
 using InfoTrackSeo.Models;
-using Microsoft.Ajax.Utilities;
-using Newtonsoft.Json;
 
 namespace InfoTrackSeo.Controllers
 {
@@ -24,14 +17,14 @@ namespace InfoTrackSeo.Controllers
             const string uri = "https://www.infotrack.com.au";
             const string keyword = "online title search";
 
-            var data = await Helpers.Crawler.GetResultsAsString(keyword);
+            var data = await Crawler.GetResultsAsString(keyword);
 
             // if there is no data then something went wrong (most likely google blocked us)
             if (data == "")
                 return new JsonResult { Data = new { error = "Could not retrieve search engine results." } };
 
-            var uriCount = Helpers.Crawler.OccurrencesOfUri(uri.ToLower(), data);
-            var uriLocations = Helpers.Crawler.LocationsOfUri(uri.ToLower(), data);
+            var uriCount = Crawler.OccurrencesOfUri(uri.ToLower(), data);
+            var uriLocations = Crawler.LocationsOfUri(uri.ToLower(), data);
 
             return View(new HomeViewModel
             {
@@ -50,14 +43,14 @@ namespace InfoTrackSeo.Controllers
         /// <returns></returns>
         public async Task<JsonResult> Crawl(string uri, string keyword)
         {
-            var data = await Helpers.Crawler.GetResultsAsString(keyword);
+            var data = await Crawler.GetResultsAsString(keyword);
 
             // if there is no data then something went wrong (most likely google blocked us)
             if (data == "")
                 return new JsonResult { Data = new { error = "Could not retrieve search engine results." } };
 
-            var uriCount = Helpers.Crawler.OccurrencesOfUri(uri.ToLower(), data);
-            var uriLocations = Helpers.Crawler.LocationsOfUri(uri.ToLower(), data);
+            var uriCount = Crawler.OccurrencesOfUri(uri.ToLower(), data);
+            var uriLocations = Crawler.LocationsOfUri(uri.ToLower(), data);
 
             return new JsonResult
             {
@@ -65,10 +58,10 @@ namespace InfoTrackSeo.Controllers
                 {
                     success = new
                     {
-                        uri = uri,
-                        keyword = keyword,
-                        uriCount = uriCount,
-                        uriLocations = uriLocations,
+                        uri,
+                        keyword,
+                        uriCount,
+                        uriLocations
                     }
                 }
             };

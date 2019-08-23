@@ -47,7 +47,7 @@
  * @param {object} data
  */
 function ajax_post_promise(target, data) {
-    return new Promise((resolve, reject) => {
+    return new window.Promise((resolve, reject) => {
         $.post({ url: target, data: data })
             .done((response) => {
                 if (typeof response.success !== "undefined") {

@@ -1,14 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web;
-using System.Web.Util;
-using Microsoft.Web.Infrastructure;
 
 namespace InfoTrackSeo.Helpers
 {
@@ -24,7 +18,7 @@ namespace InfoTrackSeo.Helpers
         /// <returns></returns>
         public static async Task<string> GetResultsAsString(string keyword)
         {
-            var data = "";
+            string data;
             try
             {
                 using (var client = new HttpClient())
@@ -109,11 +103,11 @@ namespace InfoTrackSeo.Helpers
         private static List<int> AllIndexesOf(this string str, string value)
         {
             if (string.IsNullOrEmpty(value))
-                throw new ArgumentException("The string to find may not be empty", "value");
+                throw new ArgumentException("The string to find may not be empty", nameof(value));
             var indexes = new List<int>();
             for (var index = 0; ; index += value.Length)
             {
-                index = str.IndexOf(value, index);
+                index = str.IndexOf(value, index, StringComparison.Ordinal);
                 if (index == -1)
                     return indexes;
                 indexes.Add(index);

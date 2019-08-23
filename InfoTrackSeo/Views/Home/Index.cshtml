@@ -1,6 +1,4 @@
-﻿@using InfoTrackSeo.Controllers
-@using InfoTrackSeo.Helpers
-@model InfoTrackSeo.Models.HomeViewModel
+﻿@model InfoTrackSeo.Models.HomeViewModel
 
 @{
     ViewBag.Title = "InfoTrack SEO";
@@ -12,14 +10,14 @@
     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
     <div class="form-group">
         @Html.LabelFor(m => m.Uri)
-        @Html.TextBoxFor(m => m.Uri, new { @class = "form-control", @aria_describedby = "uriHelpBlock" })
+        @Html.TextBoxFor(m => m.Uri, new { @class = "form-control", aria_describedby = "uriHelpBlock" })
         <small id="uriHelpBlock" class="form-text text-muted">By default searches for <code>https://</code> addresses, include <code>http://</code> to override.</small>
         @Html.ValidationMessageFor(m => m.Uri, "", new { @class = "text-danger" })
     </div>
 
     <div class="form-group">
         @Html.LabelFor(m => m.Keyword)
-        @Html.TextBoxFor(m => m.Keyword, new { @class = "form-control", @aria_describedby = "keywordHelpBlock", @required = "required" })
+        @Html.TextBoxFor(m => m.Keyword, new { @class = "form-control", aria_describedby = "keywordHelpBlock", required = "required" })
         <small id="keywordHelpBlock" class="form-text text-muted">The search term(s) you would like to use.</small>
         @Html.ValidationMessageFor(m => m.Keyword, "", new { @class = "text-danger" })
     </div>
@@ -34,18 +32,18 @@
         <div class="card-header">
             <div class="row">
                 <div class="col-3">
-                    <label class="font-weight-bold" for="Uri">URI</label>
+                    <label class="font-weight-bold" for="uriDisplay">URI</label>
                 </div>
                 <div class="col-9">
-                    <span id="Uri">@Html.DisplayFor(m => m.Uri)</span>
+                    <span id="uriDisplay">@Html.DisplayFor(m => m.Uri)</span>
                 </div>
             </div>
             <div class="row">
                 <div class="col-3">
-                    <label class="font-weight-bold" for="Keyword">Keyword</label>
+                    <label class="font-weight-bold" for="keywordDisplay">Keyword</label>
                 </div>
                 <div class="col-9">
-                    <span id="Keyword">@Html.DisplayFor(m => m.Keyword)</span>
+                    <span id="keywordDisplay">@Html.DisplayFor(m => m.Keyword)</span>
                 </div>
             </div>
         </div>
@@ -67,18 +65,18 @@
         <div class="card-header">
             <div class="row">
                 <div class="col-3">
-                    <label class="font-weight-bold" for="Uri">URI</label>
+                    <label class="font-weight-bold">URI</label>
                 </div>
                 <div class="col-9">
-                    <span id="Uri">${uri}</span>
+                    <span>${uri}</span>
                 </div>
             </div>
             <div class="row">
                 <div class="col-3">
-                    <label class="font-weight-bold" for="Keyword">Keyword</label>
+                    <label class="font-weight-bold">Keyword</label>
                 </div>
                 <div class="col-9">
-                    <span id="Keyword">${keyword}</span>
+                    <span>${keyword}</span>
                 </div>
             </div>
         </div>
