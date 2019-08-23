@@ -1,17 +1,36 @@
 ﻿$(function () {
+    let numResults = 1;
+
+    // initialize toasts
     $(".toast").toast({ delay: 3000 });
 
+    // perform the search
     $("#submitCrawlForm").click(e => {
         e.preventDefault();
 
-        var $form = $("#crawlForm");
+        const $form = $("#crawlForm");
 
+        // check for empty inputs
         if ($("#Keyword").val() !== "" && $("#Uri").val() !== "") {
+            let uri = $("#Uri", $form).val();
+
+            // check for https and http, set default to https
+            if (uri.indexOf("https://") < 0 && uri.indexOf("http://") < 0) {
+                uri = `https://${uri}`;
+                $("#Uri", $form).val(uri);
+            }
+
+            // get form data and target
             const formData = $form.serializeArray();
             const target = $form.attr("action");
 
             ajax_post_promise(target, formData).then((response) => {
-                $(".card-deck").append($("#resultsTemplate").tmpl(response));
+                numResults++;
+                $(".custom-card-deck").prepend($("#resultsTemplate").tmpl(response));
+                if (numResults >= 3) {
+                    $(".custom-card-deck").css("justify-content", "space-between");
+                    $(".custom-card-deck .card-result").css("margin-right", "0");
+                }
                 showToast("Success", "Retrieved search engine results.");
             }).catch((response) => {
                 showToast("Error", response);
@@ -41,6 +60,11 @@ function ajax_post_promise(target, data) {
     });
 }
 
+/**
+ * show toasts after modifying header and body
+ * @param {string} header header of the toast
+ * @param {string} body body / message of the toast
+ */
 function showToast(header, body) {
     const $toast = $(".toast");
     $("#toastHeader").html(header);

@@ -20,7 +20,7 @@ namespace InfoTrackSeo
                         "~/Scripts/modernizr-*"));
 
             bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
-                      "~/Scripts/bootstrap.min.js"));
+                      "~/Scripts/bootstrap.min.js", "~/Scripts/popper.min.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/app").Include("~/Scripts/app.js"));
 

@@ -14,6 +14,7 @@ namespace InfoTrackSeo.Helpers
 {
     public static class Crawler
     {
+        // google search address that returns 100 results
         private const string Address = "https://www.google.com.au/search?gl=au&hl=en&pws=0&num=100&q=";
 
         /// <summary>
@@ -50,10 +51,8 @@ namespace InfoTrackSeo.Helpers
         /// </summary>
         /// <param name="responseFromServer"></param>
         /// <returns></returns>
-        private static List<int> IndexesOfLinks(string responseFromServer)
-        {
-            return responseFromServer.AllIndexesOf("<div class=\"ZINbbc xpd O9g5cc uUPGi\"><div class=\"kCrYT\">");
-        }
+        private static List<int> IndexesOfLinks(string responseFromServer) =>
+            responseFromServer.AllIndexesOf("<div class=\"ZINbbc xpd O9g5cc uUPGi\"><div class=\"kCrYT\">");
 
         /// <summary>
         /// get indexes of where the uri occurs on the results
@@ -61,10 +60,8 @@ namespace InfoTrackSeo.Helpers
         /// <param name="uri"></param>
         /// <param name="responseFromServer"></param>
         /// <returns></returns>
-        private static IEnumerable<int> IndexesOfUri(string uri, string responseFromServer)
-        {
-            return responseFromServer.AllIndexesOf($"<div class=\"kCrYT\"><a href=\"/url?q={uri}");
-        }
+        private static IEnumerable<int> IndexesOfUri(string uri, string responseFromServer) =>
+            responseFromServer.AllIndexesOf($"<div class=\"kCrYT\"><a href=\"/url?q={uri}");
 
         /// <summary>
         /// count how many times the uri appears on the page as a search result
@@ -72,10 +69,8 @@ namespace InfoTrackSeo.Helpers
         /// <param name="uri"></param>
         /// <param name="responseFromServer"></param>
         /// <returns></returns>
-        public static int OccurrencesOfUri(string uri, string responseFromServer)
-        {
-            return responseFromServer.AllIndexesOf($"<div class=\"kCrYT\"><a href=\"/url?q={uri}").Count;
-        }
+        public static int OccurrencesOfUri(string uri, string responseFromServer) =>
+            responseFromServer.AllIndexesOf($"<div class=\"kCrYT\"><a href=\"/url?q={uri}").Count;
 
         /// <summary>
         /// find out which search result the uri is a part of, excludes adverts
