@@ -36,7 +36,10 @@ namespace InfoTrackSeo.Controllers
         {
             // create a new crawler and do a crawl using the provided search terms
             var crawlerV2 = new CrawlerV2(Address, keywords);
-            var data = await crawlerV2.GetResultsAsString();
+
+            await crawlerV2.Search();
+
+            var data = crawlerV2.GetResponse();
 
             if (data == string.Empty)
                 return new JsonResult() { Data = new {error = "Could not retrieve search engine results."}};
@@ -49,8 +52,11 @@ namespace InfoTrackSeo.Controllers
             // create a new uri locator so we can figure out where all the links are
             var uriLocator = new ChildElementLocator(data, htmlOfDivContainingLink, htmlOfAnchorElement, uri);
 
-            var uriCount = uriLocator.OccurrencesOfUri();
-            var uriLocations = uriLocator.LocationsOfUri();
+            uriLocator.FindLocationsOfUri();
+            uriLocator.CountUriOccurrences();
+
+            var uriLocations = uriLocator.GetUriLocations();
+            var uriCount = uriLocator.GetUriCount();
 
             // display "no results" if there are no links to infotrack in the search results
             if (uriCount == 0)
@@ -63,7 +69,7 @@ namespace InfoTrackSeo.Controllers
                     success = new
                     {
                         uri,
-                        searchTerms = keywords,
+                        keywords,
                         uriCount,
                         uriLocations
                     }

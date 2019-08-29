@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Net.Http;
+using System.Runtime.Remoting.Messaging;
 using System.Threading.Tasks;
 using System.Web;
+using Microsoft.Ajax.Utilities;
 
 namespace InfoTrackSeo.Helpers
 {
@@ -9,45 +11,57 @@ namespace InfoTrackSeo.Helpers
     {
 
         private string Address { get; }
-        private string SearchTerm { get; }
+        private string Keywords { get; }
+        private string Response { get; set; }
 
         /// <summary>
         /// constructor
         /// </summary>
         /// <param name="address"></param>
-        /// <param name="searchTerm"></param>
-        public CrawlerV2(string address, string searchTerm)
+        /// <param name="keywords"></param>
+        public CrawlerV2(string address, string keywords)
         {
-            Address = address ?? throw new ArgumentNullException(nameof(address));
-            SearchTerm = searchTerm ?? throw new ArgumentNullException(nameof(searchTerm));
+            if (string.IsNullOrEmpty(address))
+                throw new ArgumentNullException(nameof(address));
+            if (string.IsNullOrEmpty(keywords))
+                throw new ArgumentNullException(nameof(keywords));
+            Address = address;
+            Keywords = keywords;
         }
 
         /// <summary>
-        /// Get response from the search as string
+        /// Do the search and store it in Response
         /// </summary>
         /// <returns></returns>
-        public async Task<string> GetResultsAsString()
+        public async Task Search()
         {
-            string data;
             try
             {
                 using (var client = new HttpClient())
                 {
-                    using (var res = await client.GetAsync(Address + HttpUtility.UrlEncode(SearchTerm)))
+                    using (var res = await client.GetAsync(Address + HttpUtility.UrlEncode(Keywords)))
                     {
                         using (var content = res.Content)
                         {
-                            data = await content.ReadAsStringAsync();
+                            var data = await content.ReadAsStringAsync();
+                            if (string.IsNullOrEmpty(data))
+                                throw new ArgumentNullException(nameof(data));
+                            Response = data;
                         }
                     }
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return string.Empty;
+                throw new ArgumentException(ex.Message);
             }
 
-            return data;
         }
+
+        /// <summary>
+        /// Get the response
+        /// </summary>
+        /// <returns></returns>
+        public string GetResponse() => Response;
     }
 }

@@ -11,6 +11,10 @@ namespace InfoTrackSeo.Helpers
 
         private string ChildString { get; }
 
+        private List<int> UriLocations { get; set; }
+
+        private int UriCount { get; set; }
+
         /// <summary>
         /// Constructor
         /// </summary>
@@ -28,19 +32,23 @@ namespace InfoTrackSeo.Helpers
         /// Get a list of indexes for where the child string occurs
         /// </summary>
         /// <returns></returns>
-        private IEnumerable<int> IndexesOfUri() => ResponseFromServer.AllIndexesOf(ChildString+Uri);
+        private IEnumerable<int> IndexesOfUri() => ResponseFromServer.FindAllIndexesOfSubstring(ChildString+Uri);
 
         /// <summary>
-        /// Count how many times the uri appears on the page
+        /// count how many times the Uri is found
         /// </summary>
-        /// <returns></returns>
-        public int OccurrencesOfUri() => IndexesOfUri().Count();
+        public void CountUriOccurrences() => UriCount = IndexesOfUri().Count();
 
         /// <summary>
-        /// Find out where the uri appears on the page
+        /// return uri count
         /// </summary>
         /// <returns></returns>
-        public List<int> LocationsOfUri()
+        public int GetUriCount() => UriCount;
+
+        /// <summary>
+        /// Find locations of uri
+        /// </summary>
+        public void FindLocationsOfUri()
         {
             var indexesOfLinks = IndexesOfLinks();
             var indexesOfInfoTrack = IndexesOfUri();
@@ -59,7 +67,14 @@ namespace InfoTrackSeo.Helpers
                 }
             }
 
-            return infoTrackFoundAt;
+            UriLocations = infoTrackFoundAt;
         }
+
+        /// <summary>
+        /// get uri locations
+        /// </summary>
+        /// <returns></returns>
+        public List<int> GetUriLocations() => UriLocations;
+
     }
 }

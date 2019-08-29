@@ -24,7 +24,7 @@ namespace InfoTrackSeo.Helpers
         /// Get a list of indexes for where the parent string occurs
         /// </summary>
         /// <returns></returns>
-        protected List<int> IndexesOfLinks() => ResponseFromServer.AllIndexesOf(ParentString);
+        protected List<int> IndexesOfLinks() => ResponseFromServer.FindAllIndexesOfSubstring(ParentString);
 
     }
 

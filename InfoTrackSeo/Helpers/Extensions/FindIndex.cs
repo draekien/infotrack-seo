@@ -11,7 +11,7 @@ namespace InfoTrackSeo.Helpers.Extensions
         /// <param name="str"></param>
         /// <param name="subStr"></param>
         /// <returns></returns>
-        public static List<int> AllIndexesOf(this string str, string subStr)
+        public static List<int> FindAllIndexesOfSubstring(this string str, string subStr)
         {
             if (string.IsNullOrEmpty(str))
                 throw new ArgumentNullException(nameof(str));
