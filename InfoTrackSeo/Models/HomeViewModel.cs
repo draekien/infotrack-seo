@@ -9,9 +9,9 @@ namespace InfoTrackSeo.Models
         [Required]
         public string Uri { get; set; }
 
-        [Display(Name = "Keyword")]
+        [Display(Name = "Keywords")]
         [Required]
-        public string Keyword { get; set; }
+        public string Keywords { get; set; }
 
         /// <summary>
         /// Number of times InfoTrack's website appears in the search results
