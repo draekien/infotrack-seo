@@ -22,7 +22,8 @@ namespace InfoTrackSeo.Helpers
         /// <param name="parentString"></param>
         /// <param name="childString"></param>
         /// <param name="uri"></param>
-        public ChildElementLocator(string responseFromServer, string parentString, string childString, string uri) : base(responseFromServer, parentString)
+        /// <param name="findIndex"></param>
+        public ChildElementLocator(string responseFromServer, string parentString, string childString, string uri, IFindIndex findIndex) : base(responseFromServer, parentString, findIndex)
         {
             Uri = uri ?? throw new ArgumentNullException(nameof(uri));
             ChildString = childString ?? throw new ArgumentNullException(nameof(childString));
@@ -32,7 +33,7 @@ namespace InfoTrackSeo.Helpers
         /// Get a list of indexes for where the child string occurs
         /// </summary>
         /// <returns></returns>
-        private IEnumerable<int> IndexesOfUri() => ResponseFromServer.FindAllIndexesOfSubstring(ChildString+Uri);
+        private IEnumerable<int> IndexesOfUri() => _findIndex.FindAllIndexesOfSubstring(ResponseFromServer, ChildString + Uri);
 
         /// <summary>
         /// count how many times the Uri is found

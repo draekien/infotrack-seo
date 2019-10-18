@@ -129,6 +129,7 @@
     <Compile Include="Helpers\CrawlerV2.cs" />
     <Compile Include="Helpers\Extensions\FindIndex.cs" />
     <Compile Include="Helpers\ChildElementLocator.cs" />
+    <Compile Include="Helpers\Extensions\IFindIndex.cs" />
     <Compile Include="Helpers\ParentElementLocator.cs" />
     <Compile Include="Models\HomeViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

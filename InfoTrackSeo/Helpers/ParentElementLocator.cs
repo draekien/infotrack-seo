@@ -9,22 +9,26 @@ namespace InfoTrackSeo.Helpers
         protected string ResponseFromServer { get; }
         private string ParentString { get; }
 
+        protected readonly IFindIndex FindIndex;
+
         /// <summary>
         /// constructor
         /// </summary>
         /// <param name="responseFromServer"></param>
         /// <param name="parentString"></param>
-        protected ParentElementLocator(string responseFromServer, string parentString)
+        /// <param name="findIndex"></param>
+        protected ParentElementLocator(string responseFromServer, string parentString, IFindIndex findIndex)
         {
             ResponseFromServer = responseFromServer ?? throw new ArgumentNullException(nameof(responseFromServer));
             ParentString = parentString ?? throw new ArgumentNullException(nameof(parentString));
+            FindIndex = findIndex;
         }
 
         /// <summary>
         /// Get a list of indexes for where the parent string occurs
         /// </summary>
         /// <returns></returns>
-        protected List<int> IndexesOfLinks() => ResponseFromServer.FindAllIndexesOfSubstring(ParentString);
+        protected List<int> IndexesOfLinks() => FindIndex.FindAllIndexesOfSubstring(ResponseFromServer, ParentString);
 
     }
 

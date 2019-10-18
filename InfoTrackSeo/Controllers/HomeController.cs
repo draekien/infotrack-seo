@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using InfoTrackSeo.Helpers;
+using InfoTrackSeo.Helpers.Extensions;
 using InfoTrackSeo.Models;
 
 namespace InfoTrackSeo.Controllers
@@ -50,7 +51,7 @@ namespace InfoTrackSeo.Controllers
             const string htmlOfAnchorElement = "<div class=\"kCrYT\"><a href=\"/url?q=";
 
             // create a new uri locator so we can figure out where all the links are
-            var uriLocator = new ChildElementLocator(data, htmlOfDivContainingLink, htmlOfAnchorElement, uri);
+            var uriLocator = new ChildElementLocator(data, htmlOfDivContainingLink, htmlOfAnchorElement, uri, new FindIndex());
 
             uriLocator.FindLocationsOfUri();
             uriLocator.CountUriOccurrences();

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace InfoTrackSeo.Helpers.Extensions
 {
-    public static class FindIndex
+    public class FindIndex : IFindIndex
     {
         /// <summary>
         /// Find all instances of subStr in str and return a list
@@ -11,7 +11,7 @@ namespace InfoTrackSeo.Helpers.Extensions
         /// <param name="str"></param>
         /// <param name="subStr"></param>
         /// <returns></returns>
-        public static List<int> FindAllIndexesOfSubstring(this string str, string subStr)
+        public List<int> FindAllIndexesOfSubstring(string str, string subStr)
         {
             if (string.IsNullOrEmpty(str))
                 throw new ArgumentNullException(nameof(str));
