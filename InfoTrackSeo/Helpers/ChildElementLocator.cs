@@ -33,7 +33,7 @@ namespace InfoTrackSeo.Helpers
         /// Get a list of indexes for where the child string occurs
         /// </summary>
         /// <returns></returns>
-        private IEnumerable<int> IndexesOfUri() => _findIndex.FindAllIndexesOfSubstring(ResponseFromServer, ChildString + Uri);
+        private IEnumerable<int> IndexesOfUri() => FindIndex.FindAllIndexesOfSubstring(ResponseFromServer, ChildString + Uri);
 
         /// <summary>
         /// count how many times the Uri is found
